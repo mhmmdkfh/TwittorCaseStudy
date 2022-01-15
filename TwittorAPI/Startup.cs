@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TwittorAPI.GraphQL;
+using TwittorAPI.Models;
 
 namespace TwittorAPI
 {
@@ -27,11 +30,25 @@ namespace TwittorAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
+            var conString = Configuration.GetConnectionString("MyDatabase");
+
+            services.AddDbContext<TwittorContext>(options =>
+                 options.UseSqlServer(conString)
+            );
+
+            //GraohQL
+            services
+               .AddGraphQLServer()
+               .AddQueryType<Query>()
+               .AddMutationType<Mutation>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TwittorAPI", Version = "v1" });
             });
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +69,7 @@ namespace TwittorAPI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGraphQL();
                 endpoints.MapControllers();
             });
         }

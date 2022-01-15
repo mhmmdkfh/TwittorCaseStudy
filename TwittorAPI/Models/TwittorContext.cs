@@ -28,7 +28,7 @@ namespace TwittorAPI.Models
             /*if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=KIFAHI\\SQLEXPRESS;Database=Twittor;uid=user1;pwd=Kosongkan@saja;");
+                optionsBuilder.UseSqlServer("Server=KIFAHI\\SQLEXPRESS;Database=Twittor;uid=user1;pwd=Kosongkan@saja");
             }*/
         }
 
@@ -46,6 +46,8 @@ namespace TwittorAPI.Models
                     .IsUnicode(false)
                     .HasColumnName("Comment");
 
+                entity.Property(e => e.Created).HasColumnType("datetime");
+
                 entity.HasOne(d => d.Twit)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.TwitId)
@@ -57,7 +59,7 @@ namespace TwittorAPI.Models
             {
                 entity.ToTable("Role");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.RoleName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -66,6 +68,8 @@ namespace TwittorAPI.Models
             modelBuilder.Entity<Twittor>(entity =>
             {
                 entity.ToTable("Twittor");
+
+                entity.Property(e => e.Created).HasColumnType("datetime");
 
                 entity.Property(e => e.Twit)
                     .IsRequired()
@@ -82,6 +86,8 @@ namespace TwittorAPI.Models
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User");
+
+                entity.Property(e => e.Created).HasColumnType("datetime");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
