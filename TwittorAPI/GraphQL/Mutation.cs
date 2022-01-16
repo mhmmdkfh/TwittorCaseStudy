@@ -161,6 +161,7 @@ namespace TwittorAPI.GraphQL
             return await Task.FromResult(ret);
         }
 
+        [Authorize(Roles = new[] { "ADMIN" })]
         public async Task<TransactionStatus> ChangeUserRoleAsync(
             UserRoleUpdate input,
             [Service] TwittorContext context,
@@ -183,6 +184,7 @@ namespace TwittorAPI.GraphQL
             return new TransactionStatus(false, "User doesn't exist");
         }
 
+        [Authorize(Roles = new[] { "ADMIN" })]
         public async Task<TransactionStatus> LockUserAsync(
             int userId,
             [Service] TwittorContext context,
@@ -212,6 +214,7 @@ namespace TwittorAPI.GraphQL
             }
         }
 
+        [Authorize(Roles = new[] { "MEMBER", "ADMIN" })]
         public async Task<TransactionStatus> ChangePasswordAsync(
                     ChangePasswordInput input,
                     [Service] TwittorContext context,
@@ -240,6 +243,7 @@ namespace TwittorAPI.GraphQL
             return await Task.FromResult(ret);
         }
 
+        [Authorize(Roles = new[] { "MEMBER", "ADMIN" })]
         public async Task<TransactionStatus> EditProfileAsync(
                     UpdateProfileInput input,
                     [Service] TwittorContext context,
@@ -294,6 +298,7 @@ namespace TwittorAPI.GraphQL
             return await Task.FromResult(ret);
         }
 
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<TransactionStatus> DeleteTwittorAsync(
             int userId,
             [Service] TwittorContext context,
@@ -324,6 +329,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Comment
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<TransactionStatus> AddCommentAsync(
            CommentInput input,
            [Service] IOptions<KafkaSettings> kafkaSettings)

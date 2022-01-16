@@ -46,7 +46,8 @@ namespace TwittorAPI
             services
                .AddGraphQLServer()
                .AddQueryType<Query>()
-               .AddMutationType<Mutation>();
+               .AddMutationType<Mutation>()
+               .AddAuthorization();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
