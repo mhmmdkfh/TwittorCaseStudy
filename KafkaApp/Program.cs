@@ -37,7 +37,7 @@ namespace KafkaApp
             using (var consumer = new ConsumerBuilder<string, string>(Serverconfig).Build())
             {
                 Console.WriteLine("Connected");
-                var topics = new string[] { "user", "twittor", "comment", "role", "userrole", "delete", "updateprofile", "changepassword", };
+                var topics = new string[] { "user", "twittor", "comment", "role", "userrole", "deletetwit", "updateprofile", "changepassword", "changeuserrole", "lockuser" };
                 consumer.Subscribe(topics);
 
                 Console.WriteLine("Waiting messages....");
@@ -75,7 +75,7 @@ namespace KafkaApp
                                 UserRole userrole = JsonConvert.DeserializeObject<UserRole>(cr.Message.Value);
                                 dbcontext.UserRoles.Add(userrole);
                             }
-                            if (cr.Topic == "delete")
+                            if (cr.Topic == "deletetwit")
                             {
                                 Twittor twittor = JsonConvert.DeserializeObject<Twittor>(cr.Message.Value);
                                 dbcontext.Twittors.Remove(twittor);
@@ -90,7 +90,17 @@ namespace KafkaApp
                                 User password = JsonConvert.DeserializeObject<User>(cr.Message.Value);
                                 dbcontext.Users.Update(password);
                             }
-                            
+                            if (cr.Topic == "changeuserrole")
+                            {
+                                UserRole userrole = JsonConvert.DeserializeObject<UserRole>(cr.Message.Value);
+                                dbcontext.UserRoles.Update(userrole);
+                            }
+                            if (cr.Topic == "lockuser")
+                            {
+                                UserRole lockuser = JsonConvert.DeserializeObject<UserRole>(cr.Message.Value);
+                                dbcontext.UserRoles.Remove(lockuser);
+                            }
+
                             await dbcontext.SaveChangesAsync();
                             Console.WriteLine("Data was saved into database");
                         }

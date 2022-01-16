@@ -25,9 +25,11 @@ namespace KafkaCreateTopics
             topics.Add("comment");
             topics.Add("role");
             topics.Add("userrole");
-            topics.Add("delete");
+            topics.Add("deletetwit");
             topics.Add("changepassword");
             topics.Add("updateprofile");
+            topics.Add("lockuser");
+            topics.Add("changeuserrole");
             foreach (var topic in topics)
             {
                 using (var adminClient = new AdminClientBuilder(config).Build())
